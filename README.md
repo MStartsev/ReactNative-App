@@ -17,3 +17,7 @@
 1. Створити папку Screens
 2. Створити компонент RegistrationScreen
 3. Додати розмітку форми в компонент RegistrationScreen
+
+<p align="center">
+ <img width="400px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-10/Screenshot.jpg" alt="Screenshot"/>
+</p>
