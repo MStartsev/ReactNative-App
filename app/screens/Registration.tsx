@@ -6,10 +6,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
-  Keyboard,
   ImageBackground,
 } from "react-native";
-import { Stack } from "expo-router";
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 import { AvatarUpload } from "@/components/auth/AvatarUpload";
@@ -17,9 +15,8 @@ import { COLORS, SIZES } from "@/constants/theme";
 
 export default function Registration() {
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback>
       <View style={styles.container}>
-        <Stack.Screen options={{ headerShown: false }} />
         <ImageBackground
           source={require("../../assets/images/mountains-bg.jpg")}
           style={styles.backgroundImage}
