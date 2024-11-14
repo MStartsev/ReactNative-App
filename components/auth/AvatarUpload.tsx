@@ -3,14 +3,24 @@ import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { COLORS } from "@/constants/theme";
 
-export const AvatarUpload: React.FC = () => (
-  <View style={styles.photoContainer}>
-    <View style={styles.photoPlaceholder} />
-    <TouchableOpacity style={styles.addPhotoButton}>
-      <AntDesign name="pluscircleo" size={25} color={COLORS.primary} />
-    </TouchableOpacity>
-  </View>
-);
+interface AvatarUploadProps {
+  onPress: () => void;
+  avatarUrl?: string;
+}
+
+export const AvatarUpload: React.FC<AvatarUploadProps> = ({
+  onPress,
+  avatarUrl,
+}) => {
+  return (
+    <View style={styles.photoContainer}>
+      <View style={styles.photoPlaceholder}></View>
+      <TouchableOpacity style={styles.addPhotoButton} onPress={onPress}>
+        <AntDesign name="pluscircleo" size={25} color={COLORS.primary} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   photoContainer: {

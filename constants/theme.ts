@@ -12,6 +12,11 @@ export const COLORS = {
   },
 };
 
+export const FONTS = {
+  regular: "Roboto_400Regular",
+  medium: "Roboto_500Medium",
+};
+
 export const SIZES = {
   padding: 16,
   borderRadius: {
@@ -22,5 +27,9 @@ export const SIZES = {
   input: {
     height: 50,
     fontSize: 16,
+  },
+  text: {
+    title: 30,
+    button: 16,
   },
 };

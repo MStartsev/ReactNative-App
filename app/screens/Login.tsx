@@ -11,25 +11,19 @@ import {
 } from "react-native";
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
-import { AvatarUpload } from "@/components/auth/AvatarUpload";
 import { COLORS, SIZES, FONTS } from "@/constants/theme";
-import type { RegistrationFormData } from "@/types/auth";
+import type { LoginFormData } from "@/types/auth";
 
-export default function Registration() {
-  const [formData, setFormData] = useState<RegistrationFormData>({
-    login: "",
+export default function Login() {
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    console.log("Form submitted:", formData);
+    console.log("Login Form Data:", formData);
     Keyboard.dismiss();
-  };
-
-  const handleAvatarUpload = () => {
-    console.log("Avatar upload pressed");
   };
 
   return (
@@ -44,17 +38,7 @@ export default function Registration() {
             style={styles.keyboard}
           >
             <View style={styles.form}>
-              <AvatarUpload onPress={handleAvatarUpload} />
-
-              <Text style={styles.title}>Реєстрація</Text>
-
-              <Input
-                placeholder="Логін"
-                value={formData.login}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, login: text }))
-                }
-              />
+              <Text style={styles.title}>Увійти</Text>
 
               <Input
                 placeholder="Адреса електронної пошти"
@@ -66,24 +50,26 @@ export default function Registration() {
                 autoCapitalize="none"
               />
 
-              <Input
-                placeholder="Пароль"
-                value={formData.password}
-                onChangeText={(text) =>
-                  setFormData((prev) => ({ ...prev, password: text }))
-                }
-                secureTextEntry={!showPassword}
-                showPasswordButton
-                onTogglePassword={() => setShowPassword(!showPassword)}
-                isPasswordVisible={showPassword}
-              />
+              <View style={styles.passwordWrapper}>
+                <Input
+                  placeholder="Пароль"
+                  value={formData.password}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, password: text }))
+                  }
+                  secureTextEntry={!showPassword}
+                  showPasswordButton
+                  onTogglePassword={() => setShowPassword(!showPassword)}
+                  isPasswordVisible={showPassword}
+                />
+              </View>
 
-              <Button title="Зареєструватися" onPress={handleSubmit} />
+              <Button title="Увійти" onPress={handleSubmit} />
 
-              <View style={styles.loginLink}>
-                <Text style={styles.loginText}>Вже є акаунт? </Text>
+              <View style={styles.registerLink}>
+                <Text style={styles.registerText}>Немає акаунту? </Text>
                 <TouchableWithoutFeedback>
-                  <Text style={styles.loginLinkText}>Увійти</Text>
+                  <Text style={styles.registerLinkText}>Зареєструватися</Text>
                 </TouchableWithoutFeedback>
               </View>
             </View>
@@ -112,8 +98,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: SIZES.borderRadius.form,
     borderTopRightRadius: SIZES.borderRadius.form,
     paddingHorizontal: SIZES.padding,
-    paddingTop: 92,
-    paddingBottom: 78,
+    paddingTop: 32,
+    paddingBottom: 144,
     position: "relative",
   },
   title: {
@@ -123,17 +109,19 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     color: COLORS.text.primary,
   },
-  loginLink: {
+  passwordWrapper: {
+    marginBottom: 27,
+  },
+  registerLink: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    color: COLORS.text.secondary,
   },
-  loginText: {
+  registerText: {
     color: COLORS.text.secondary,
     fontFamily: FONTS.regular,
   },
-  loginLinkText: {
+  registerLinkText: {
     color: COLORS.text.secondary,
     textDecorationLine: "underline",
     fontFamily: FONTS.regular,

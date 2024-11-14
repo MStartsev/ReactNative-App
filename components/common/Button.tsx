@@ -1,16 +1,23 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
-import { COLORS, SIZES } from "@/constants/theme";
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableOpacityProps,
+} from "react-native";
+import { COLORS, FONTS, SIZES } from "@/constants/theme";
 
-interface ButtonProps {
+interface ButtonProps extends TouchableOpacityProps {
   title: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({ title }) => (
-  <TouchableOpacity style={styles.button}>
-    <Text style={styles.buttonText}>{title}</Text>
-  </TouchableOpacity>
-);
+export const Button: React.FC<ButtonProps> = ({ title, style, ...props }) => {
+  return (
+    <TouchableOpacity style={[styles.button, style]} {...props}>
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
@@ -23,6 +30,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: COLORS.background,
-    fontSize: SIZES.input.fontSize,
+    fontSize: SIZES.text.button,
+    fontFamily: FONTS.regular,
   },
 });

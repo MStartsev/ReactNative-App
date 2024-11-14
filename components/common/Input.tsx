@@ -2,34 +2,50 @@ import React from "react";
 import {
   TextInput,
   StyleSheet,
+  TextInputProps,
   View,
   TouchableOpacity,
   Text,
 } from "react-native";
-import { COLORS, SIZES } from "@/constants/theme";
+import { COLORS, FONTS, SIZES } from "@/constants/theme";
 
-interface InputProps {
-  placeholder: string;
+interface InputProps extends TextInputProps {
   showPasswordButton?: boolean;
+  onTogglePassword?: () => void;
+  isPasswordVisible?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
-  placeholder,
+  style,
   showPasswordButton,
-}) => (
-  <View style={styles.container}>
-    <TextInput
-      style={[styles.input, showPasswordButton && styles.passwordInput]}
-      placeholder={placeholder}
-      placeholderTextColor={COLORS.input.placeholderText}
-    />
-    {showPasswordButton && (
-      <TouchableOpacity style={styles.showPasswordButton}>
-        <Text style={styles.showPasswordText}>Показати</Text>
-      </TouchableOpacity>
-    )}
-  </View>
-);
+  onTogglePassword,
+  isPasswordVisible,
+  ...props
+}) => {
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={[
+          styles.input,
+          showPasswordButton && styles.passwordInput,
+          style,
+        ]}
+        placeholderTextColor={COLORS.input.placeholderText}
+        {...props}
+      />
+      {showPasswordButton && (
+        <TouchableOpacity
+          style={styles.showPasswordButton}
+          onPress={onTogglePassword}
+        >
+          <Text style={styles.showPasswordText}>
+            {isPasswordVisible ? "Сховати" : "Показати"}
+          </Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.borderRadius.input,
     padding: SIZES.padding,
     backgroundColor: COLORS.input.background,
+    fontFamily: FONTS.regular,
   },
   passwordInput: {
     paddingRight: 100,
@@ -54,5 +71,6 @@ const styles = StyleSheet.create({
   },
   showPasswordText: {
     color: COLORS.text.secondary,
+    fontFamily: FONTS.regular,
   },
 });
