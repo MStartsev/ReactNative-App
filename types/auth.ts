@@ -14,3 +14,14 @@ export type UserProfile = {
   email: string;
   avatar?: string;
 };
+
+export interface ValidationResult {
+  isValid: boolean;
+  message: string;
+}
+
+export interface FormErrors {
+  login?: string;
+  email?: string;
+  password?: string;
+}

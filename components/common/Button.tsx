@@ -9,12 +9,24 @@ import { COLORS, FONTS, SIZES } from "@/constants/theme";
 
 interface ButtonProps extends TouchableOpacityProps {
   title: string;
+  disabled?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ title, style, ...props }) => {
+export const Button: React.FC<ButtonProps> = ({
+  title,
+  style,
+  disabled,
+  ...props
+}) => {
   return (
-    <TouchableOpacity style={[styles.button, style]} {...props}>
-      <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.buttonDisabled, style]}
+      {...props}
+      disabled={disabled}
+    >
+      <Text style={[styles.buttonText, disabled && styles.buttonTextDisabled]}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -28,9 +40,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 16,
   },
+  buttonDisabled: {
+    backgroundColor: COLORS.input.border,
+  },
   buttonText: {
     color: COLORS.background,
     fontSize: SIZES.text.button,
     fontFamily: FONTS.regular,
+  },
+  buttonTextDisabled: {
+    color: COLORS.input.placeholderText,
   },
 });

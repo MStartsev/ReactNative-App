@@ -1,23 +1,23 @@
-# Вступ до React Native. Верстка екранів. Робота зі стилями. Дебаг
+# Обробка подій. Робота із текстовими інпутами та клавіатурою
 
 ## Завдання 1
 
-1. Встановити expo
-2. Встановити Android Studio
-3. Встановити Xcode (якщо працюєте на Mac)
-4. Ініціалізувати проект за допомогою expo (Вибираємо шаблон проекту blank)
-5. Запустити проект
-6. Налаштувати Android Studio
-7. Налаштувати Xcode (якщо працюєте на Mac)
-8. Встановити expo client собі на телефон
-9. Запустити створений проект на телефоні, емуляторі Android, симуляторі
-
-## Завдання 2
-
-1. Створити папку Screens
-2. Створити компонент RegistrationScreen
-3. Додати розмітку форми в компонент RegistrationScreen
+1. Створити компонент LoginScreen
+2. Додати розмітку форми в компонент LoginScreen
+3. Додати стилі до компонента RegistrationScreen
+4. Додати стилі до компонента LoginScreen
+5. Додати логіку роботи з формою в компонент RegistrationScreen
+6. Додати логіку роботи з формою в компонент LoginScreen
+7. Під час сабміту форм збирати дані з них і виводити в консоль
+8. Додати автозакриття клавіатури по кліку за межами форм (Використовуємо Keyboard.dismiss)
 
 <p align="center">
- <img width="400px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-10/Screenshot.jpg" alt="Screenshot"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot.jpg" alt="Screenshot"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot_2.jpg" alt="Screenshot2"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot_3.jpg" alt="Screenshot3"/>
+</p>
+<p align="center">
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot_4.jpg" alt="Screenshot4"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot_5.jpg" alt="Screenshot5"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-11/Screenshot_6.jpg" alt="Screenshot6"/>
 </p>

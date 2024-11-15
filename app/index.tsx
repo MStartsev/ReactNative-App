@@ -5,8 +5,8 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import Registration from "./screens/Registration";
-import Login from "./screens/Login";
+import RegistrationScreen from "./screens/RegistrationScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,6 +18,6 @@ export default function App() {
     return <View />;
   }
 
-  // return <Registration />;
-  return <Login />;
+  // return <RegistrationScreen />;
+  return <LoginScreen />;
 }

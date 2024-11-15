@@ -4,12 +4,14 @@ export const COLORS = {
   input: {
     background: "#F6F6F6",
     border: "#E8E8E8",
+    borderFocused: "#CC6C00",
     placeholderText: "#BDBDBD",
   },
   text: {
     primary: "#212121",
     secondary: "#1B4371",
   },
+  error: "#FF0000",
 };
 
 export const FONTS = {
