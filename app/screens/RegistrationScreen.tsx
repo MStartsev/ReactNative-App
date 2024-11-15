@@ -36,13 +36,21 @@ export default function RegistrationScreen() {
 
   const handleSubmit = () => {
     setIsFormTouched(true);
-
     const loginValid = validateField("login", formData.login);
     const emailValid = validateField("email", formData.email);
     const passwordValid = validateField("password", formData.password);
 
     if (loginValid && emailValid && passwordValid) {
       console.log("Registration form submitted:", formData);
+      // Очищення форми
+      setFormData({
+        login: "",
+        email: "",
+        password: "",
+      });
+      setErrors({});
+      setIsFormTouched(false);
+      setShowPassword(false);
     }
   };
 

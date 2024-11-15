@@ -33,12 +33,19 @@ export default function LoginScreen() {
 
   const handleSubmit = () => {
     setIsFormTouched(true);
-
     const emailValid = validateField("email", formData.email);
     const passwordValid = validateField("password", formData.password);
 
     if (emailValid && passwordValid) {
       console.log("Login form submitted:", formData);
+      // Очищення форми
+      setFormData({
+        email: "",
+        password: "",
+      });
+      setErrors({});
+      setIsFormTouched(false);
+      setShowPassword(false);
     }
   };
 
