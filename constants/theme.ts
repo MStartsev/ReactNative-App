@@ -1,6 +1,10 @@
+import Constants from "expo-constants";
+export const statusBarHeight = Constants.statusBarHeight;
+
 export const COLORS = {
   primary: "#FF6C00",
   background: "#FFFFFF",
+  grey: "#BDBDBD",
   input: {
     background: "#F6F6F6",
     border: "#E8E8E8",

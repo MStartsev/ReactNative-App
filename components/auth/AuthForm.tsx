@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/common/Button";
 import { Input } from "@/components/common/Input";
 import { AvatarUpload } from "@/components/auth/AvatarUpload";
-import { COLORS, SIZES, FONTS } from "@/constants/theme";
+import { COLORS, SIZES, FONTS, statusBarHeight } from "@/constants/theme";
 import { useKeyboardStatus } from "@/hooks/useKeyboardStatus";
 
 interface AuthFormProps {
@@ -78,6 +78,9 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               style={[
                 styles.form,
                 isRegistration ? { paddingTop: 92 } : { paddingTop: 32 },
+                isKeyboardVisible
+                  ? { marginBottom: 0 }
+                  : { marginBottom: -statusBarHeight },
               ]}
             >
               {isRegistration && onAvatarPress && (

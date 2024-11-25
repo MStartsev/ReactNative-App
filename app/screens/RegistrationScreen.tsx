@@ -2,8 +2,18 @@ import React, { useState } from "react";
 import { AuthForm } from "@/components/auth/AuthForm";
 import type { RegistrationFormData, FormErrors } from "@/types/auth";
 import { getValidationError } from "@/utils/validation";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/navigation";
 
-export default function RegistrationScreen() {
+type NavigationProp = StackNavigationProp<RootStackParamList>;
+
+interface RegistrationScreenProps {
+  navigation: NavigationProp;
+}
+
+export default function RegistrationScreen({
+  navigation,
+}: RegistrationScreenProps) {
   const [formData, setFormData] = useState<RegistrationFormData>({
     login: "",
     email: "",
@@ -51,6 +61,8 @@ export default function RegistrationScreen() {
       setErrors({});
       setIsFormTouched(false);
       setShowPassword(false);
+
+      navigation.navigate("Home");
     }
   };
 
@@ -108,7 +120,7 @@ export default function RegistrationScreen() {
       submitButtonTitle="Зареєструватися"
       bottomText="Вже є акаунт?"
       bottomLinkText="Увійти"
-      onBottomLinkPress={() => console.log("Navigate to Login")}
+      onBottomLinkPress={() => navigation.navigate("LoginScreen")} //"Navigate to Login"
       onAvatarPress={() => console.log("Avatar upload pressed")}
       isValid={isFormValid()}
     />

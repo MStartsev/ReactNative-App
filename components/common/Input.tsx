@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   containerWithError: {
-    marginBottom: 16,
+    paddingBottom: 16,
   },
   input: {
     height: SIZES.input.height,
