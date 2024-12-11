@@ -8,18 +8,26 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  Modal,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants/theme";
 import { useNavigation } from "@react-navigation/native";
 import CommentsScreen from "./CommentsScreen";
+import MapScreen from "./MapScreen";
 import { Post } from "@/types/posts";
+import { getCoordinates } from "@/services/geocoding";
+import { LocationData } from "@/types/location";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
+  const [isMapVisible, setIsMapVisible] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
+    null
+  );
   const [selectedPost, setSelectedPost] = useState<{
     id: string;
     image: any;
@@ -31,7 +39,7 @@ export default function ProfileScreen() {
       userId: "1234567890",
       image: require("@/assets/images/forest.jpg"),
       title: "Ліс",
-      location: "Ukraine",
+      location: "Славське, Україна",
       comments: 8,
       likes: 153,
       createdAt: "",
@@ -41,7 +49,7 @@ export default function ProfileScreen() {
       userId: "1234567890",
       image: require("@/assets/images/sunset.jpg"),
       title: "Захід на Чорному морі",
-      location: "Ukraine",
+      location: "Бухта Ласпі, Україна",
       comments: 3,
       likes: 200,
       createdAt: "",
@@ -51,7 +59,7 @@ export default function ProfileScreen() {
       userId: "1234567890",
       image: require("@/assets/images/lodge.jpg"),
       title: "Старий будиночок у Венеції",
-      location: "Italy",
+      location: "Венеція, Італія",
       comments: 50,
       likes: 200,
       createdAt: "",
@@ -61,6 +69,17 @@ export default function ProfileScreen() {
   const handleCommentsPress = (postId: string, postImage: any) => {
     setSelectedPost({ id: postId, image: postImage });
     setIsCommentsVisible(true);
+  };
+
+  const handleLocationPress = async (location: string) => {
+    const coordinates = await getCoordinates(location);
+    if (coordinates) {
+      setSelectedLocation({
+        ...coordinates,
+        title: location,
+      });
+      setIsMapVisible(true);
+    }
   };
 
   return (
@@ -129,14 +148,17 @@ export default function ProfileScreen() {
                           <Text style={styles.statsText}>{post.likes}</Text>
                         </View>
                       </View>
-                      <View style={styles.locationContainer}>
+                      <TouchableOpacity
+                        style={styles.locationContainer}
+                        onPress={() => handleLocationPress(post.location)}
+                      >
                         <Feather
                           name="map-pin"
                           size={24}
                           color={COLORS.text.primary}
                         />
                         <Text style={styles.locationText}>{post.location}</Text>
-                      </View>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 ))}
@@ -154,6 +176,21 @@ export default function ProfileScreen() {
           postImage={selectedPost.image}
         />
       )}
+
+      <Modal
+        visible={isMapVisible}
+        animationType="slide"
+        transparent={true}
+        statusBarTranslucent={true}
+        onRequestClose={() => setIsMapVisible(false)}
+      >
+        {selectedLocation && (
+          <MapScreen
+            location={selectedLocation}
+            onClose={() => setIsMapVisible(false)}
+          />
+        )}
+      </Modal>
     </View>
   );
 }

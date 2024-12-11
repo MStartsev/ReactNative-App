@@ -2,24 +2,12 @@
 
 ## Завдання
 
-1. Створити екран PostsScreen
-2. Створити екран CreatePostsScreen
-3. Створити екран CommentsScreen
-4. Створити екран ProfileScreen
-5. Створити екран MapScreen
-6. Створити екран Home
-7. Підключити в проект навігацію.
-8. Додати в проект переходи між екранами LoginScreen, RegistrationScreen за допомогою компонента createStackNavigator
-9. З RegistrationScreen можна перейти на LoginScreen, натиснувши на текст Увійти
-10. З LoginScreen можна перейти на RegistrationScreen, натиснувши на текст Зареєструватися
-11. Після сабміту в LoginScreen, RegistrationScreen перекидає на Home, де відразу показується екран PostsScreen
-12. Підключити нижню навігацію, використовуючи createBottomTabNavigator
-13. У нижній навігації створити 3 переходи.
-14. Клік по іконці №1 веде на екран PostsScreen
-15. Клік по іконці №2 веде на екран CreatePostsScreen
-16. Клік по іконці №3 веде на екран ProfileScreen
-17. В хедері на екрані PostsScreen додати іконку для logout
-18. Стилізувати нижню навігацію
+1. Підключити камеру в компонент CreatePostsScreen;
+2. В інпут з плейсхолдером Місцевість можна додати назву, де було зроблено знімок
+3. Додати визначення геолокації в момент створення посту при кліку на кнопку Опублікувати
+4. Після створення посту повинно перенаправляти на екран PostsScreen
+5. В компоненті окремого посту при кліку на іконку коментарів перекидає на екран CommentsScreen
+6. У компоненті окремого посту під час кліку на іконку геолокації перекидає на екран MapScreen, де можна побачити мапу з маркером, де була зроблена фотографія
 
 <p align="center">
  <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot.jpg" alt="Screenshot"/>
@@ -37,11 +25,19 @@
 </p>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_7.jpg" alt="Screenshot5"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_8.jpg" alt="Screenshot6"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_7.jpg" alt="Screenshot7"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_8.jpg" alt="Screenshot8"/>
 </p>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_9.jpg" alt="Screenshot5"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__10.jpg" alt="Screenshot6"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_9.jpg" alt="Screenshot9"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__10.jpg" alt="Screenshot10"/>
+</p>
+<p align="center">
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__11.jpg" alt="Screenshot11"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__12.jpg" alt="Screenshot12"/>
+</p>
+<p align="center">
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__13.jpg" alt="Screenshot13"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__14.jpg" alt="Screenshot14"/>
 </p>

@@ -17,7 +17,6 @@ import { Feather } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants/theme";
 import { Comment, CommentsScreenProps } from "@/types/comments";
 import { Dimensions } from "react-native";
-import { opacity } from "react-native-reanimated/lib/typescript/Colors";
 
 const { width } = Dimensions.get("window");
 

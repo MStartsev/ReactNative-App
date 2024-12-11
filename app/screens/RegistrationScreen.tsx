@@ -3,7 +3,7 @@ import { AuthForm } from "@/components/auth/AuthForm";
 import type { RegistrationFormData, FormErrors } from "@/types/auth";
 import { getValidationError } from "@/utils/validation";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "@/navigation";
+import { RootStackParamList } from "@/types/navigation";
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;
 
@@ -62,7 +62,7 @@ export default function RegistrationScreen({
       setIsFormTouched(false);
       setShowPassword(false);
 
-      navigation.navigate("Home");
+      navigation.navigate("Home", { screen: "Posts" });
     }
   };
 
