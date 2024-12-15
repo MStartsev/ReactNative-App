@@ -9,6 +9,8 @@ export type LoginFormData = {
   password: string;
 };
 
+export type ValidationFields = keyof (LoginFormData & RegistrationFormData);
+
 export interface ValidationResult {
   isValid: boolean;
   message: string;

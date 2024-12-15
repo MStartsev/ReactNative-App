@@ -1,14 +1,14 @@
 import React from "react";
 import { View } from "react-native";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "@/redux/store";
 import {
   useFonts,
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-
 import Navigation from "@/navigation";
-// import RegistrationScreen from "./screens/RegistrationScreen";
-// import LoginScreen from "./screens/LoginScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,6 +20,11 @@ export default function App() {
     return <View />;
   }
 
-  return <Navigation />;
-  // return <LoginScreen />;
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Navigation />
+      </PersistGate>
+    </Provider>
+  );
 }

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
 import { AuthForm } from "@/components/auth/AuthForm";
 import type { LoginFormData, FormErrors } from "@/types/auth";
 import { getValidationError } from "@/utils/validation";
+import { loginUser } from "@/services/auth";
+import { setUser, setLoading, setError } from "@/redux/auth/authSlice";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/types/navigation";
 
@@ -12,6 +16,7 @@ interface LoginScreenProps {
 }
 
 export default function LoginScreen({ navigation }: LoginScreenProps) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -39,23 +44,33 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsFormTouched(true);
     const emailValid = validateField("email", formData.email);
     const passwordValid = validateField("password", formData.password);
 
     if (emailValid && passwordValid) {
-      console.log("Login form submitted:", formData);
-      // Очищення форми
-      setFormData({
-        email: "",
-        password: "",
-      });
-      setErrors({});
-      setIsFormTouched(false);
-      setShowPassword(false);
+      dispatch(setLoading(true));
+      try {
+        const userData = await loginUser(formData, dispatch); // передаємо dispatch
+        dispatch(setUser(userData));
 
-      navigation.navigate("Home", { screen: "Posts" });
+        // Очищення форми
+        setFormData({
+          email: "",
+          password: "",
+        });
+        setErrors({});
+        setIsFormTouched(false);
+        setShowPassword(false);
+
+        navigation.navigate("Home", { screen: "Posts" });
+      } catch (error: any) {
+        dispatch(setError(error.message));
+        Alert.alert("Помилка", error.message);
+      } finally {
+        dispatch(setLoading(false));
+      }
     }
   };
 
@@ -100,7 +115,7 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       submitButtonTitle="Увійти"
       bottomText="Немає акаунту?"
       bottomLinkText="Зареєструватися"
-      onBottomLinkPress={() => navigation.navigate("RegistrationScreen")} //"Navigate to Registration"
+      onBottomLinkPress={() => navigation.navigate("RegistrationScreen")}
       isValid={isFormValid()}
     />
   );

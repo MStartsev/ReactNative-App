@@ -1,13 +1,17 @@
-# Навiгацiя
+# Redux i Firebase
 
 ## Завдання
 
-1. Підключити камеру в компонент CreatePostsScreen;
-2. В інпут з плейсхолдером Місцевість можна додати назву, де було зроблено знімок
-3. Додати визначення геолокації в момент створення посту при кліку на кнопку Опублікувати
-4. Після створення посту повинно перенаправляти на екран PostsScreen
-5. В компоненті окремого посту при кліку на іконку коментарів перекидає на екран CommentsScreen
-6. У компоненті окремого посту під час кліку на іконку геолокації перекидає на екран MapScreen, де можна побачити мапу з маркером, де була зроблена фотографія
+1. Підключити Redux до проекту.
+2. Підключити Firebase до проекту.
+3. Додати логіку реєстрації на екрані RegistrationScreen через методи Firebase.
+4. Додати логіку логіна на екрані LoginScreen через методи Firebase.
+5. Оновити профіль користувача на Firebase та додати туди логін у поле displayName після реєстрації.
+6. Зберігати дані про користувача в Redux після реєстрації або логінізації.
+7. Додати перевірку, чи залогінений користувач у застосунку чи ні. Якщо залогінений, то відразу перенаправляти на екран PostsScreen, інакше - на екран LoginScreen.
+8. Додати логіку Logout на екрані PostsScreen під час натискання на іконку в хедері, використовуючи методи Firebase.
+9. Додати логіку завантаження постів у базу даних, використовуючи Firebase та Redux.
+10. Додати логіку додавання коментаря під постом, використовуючи Firebase та Redux.
 
 <p align="center">
  <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot.jpg" alt="Screenshot"/>
@@ -40,4 +44,8 @@
 <p align="center">
  <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__13.jpg" alt="Screenshot13"/>
  <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__14.jpg" alt="Screenshot14"/>
+</p>
+<p align="center">
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__15.jpg" alt="Screenshot15"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__16.jpg" alt="Screenshot16"/>
 </p>

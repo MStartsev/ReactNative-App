@@ -1,3 +1,5 @@
+import { ValidationResult, ValidationFields } from "@/types/auth";
+
 export const validateEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -11,15 +13,10 @@ export const validateLogin = (login: string): boolean => {
   return login.length >= 3;
 };
 
-export interface ValidationError {
-  isValid: boolean;
-  message: string;
-}
-
 export const getValidationError = (
-  type: "email" | "password" | "login",
+  field: ValidationFields,
   value: string
-): ValidationError => {
+): ValidationResult => {
   // Спочатку перевіряємо на пусте поле
   if (!value.trim()) {
     return {
@@ -29,7 +26,7 @@ export const getValidationError = (
   }
 
   // Якщо поле не пусте, перевіряємо на інші умови
-  switch (type) {
+  switch (field) {
     case "email":
       return {
         isValid: validateEmail(value),

@@ -38,6 +38,7 @@ interface AuthFormProps {
   bottomLinkText: string;
   onBottomLinkPress: () => void;
   onAvatarPress?: () => void;
+  avatarUri?: string;
   isValid: boolean;
 }
 
@@ -53,6 +54,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
   bottomLinkText,
   onBottomLinkPress,
   onAvatarPress,
+  avatarUri, // Додаємо в деструктуризацію
   isValid = true,
 }) => {
   const isKeyboardVisible = useKeyboardStatus();
@@ -84,7 +86,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
               ]}
             >
               {isRegistration && onAvatarPress && (
-                <AvatarUpload onPress={onAvatarPress} />
+                <AvatarUpload onPress={onAvatarPress} avatarUri={avatarUri} />
               )}
 
               <Text style={styles.title}>{title}</Text>
@@ -101,6 +103,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({
                     placeholder={input.placeholder}
                     value={input.value}
                     onChangeText={input.onChange}
+                    onBlur={input.onBlur}
                     keyboardType={input.keyboardType}
                     secureTextEntry={input.secureTextEntry}
                     showPasswordButton={input.showPasswordButton}

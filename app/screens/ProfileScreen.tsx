@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -12,66 +13,69 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants/theme";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import CommentsScreen from "./CommentsScreen";
 import MapScreen from "./MapScreen";
-import { Post } from "@/types/posts";
-import { getCoordinates } from "@/services/geocoding";
 import { LocationData } from "@/types/location";
+import { RootState } from "@/redux/store";
+import { setUserPosts, togglePostLike } from "@/redux/posts/postsSlice";
+import { getUserPosts, toggleLike, Post } from "@/services/posts";
+import { getCoordinates } from "@/services/geocoding";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "@/types/navigation";
+
+type NavigationProp = StackNavigationProp<RootStackParamList>;
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 export default function ProfileScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userPosts = useSelector((state: RootState) => state.posts.userPosts);
+
   const [isCommentsVisible, setIsCommentsVisible] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
     null
   );
-  const [selectedPost, setSelectedPost] = useState<{
-    id: string;
-    image: any;
-  } | null>(null);
 
-  const [posts] = useState<Post[]>([
-    {
-      id: "1",
-      userId: "1234567890",
-      image: require("@/assets/images/forest.jpg"),
-      title: "Ліс",
-      location: "Славське, Україна",
-      comments: 8,
-      likes: 153,
-      createdAt: "",
-    },
-    {
-      id: "2",
-      userId: "1234567890",
-      image: require("@/assets/images/sunset.jpg"),
-      title: "Захід на Чорному морі",
-      location: "Бухта Ласпі, Україна",
-      comments: 3,
-      likes: 200,
-      createdAt: "",
-    },
-    {
-      id: "3",
-      userId: "1234567890",
-      image: require("@/assets/images/lodge.jpg"),
-      title: "Старий будиночок у Венеції",
-      location: "Венеція, Італія",
-      comments: 50,
-      likes: 200,
-      createdAt: "",
-    },
-  ]);
+  useEffect(() => {
+    if (user && isFocused) {
+      loadUserPosts();
+    }
+  }, [user, isFocused]);
 
-  const handleCommentsPress = (postId: string, postImage: any) => {
-    setSelectedPost({ id: postId, image: postImage });
+  const loadUserPosts = async () => {
+    try {
+      if (user) {
+        const posts = await getUserPosts(user.id);
+        dispatch(setUserPosts(posts));
+      }
+    } catch (error) {
+      console.error("Error loading user posts:", error);
+    }
+  };
+
+  const handleLike = async (postId: string) => {
+    try {
+      if (user) {
+        await toggleLike(postId, user.id);
+        dispatch(togglePostLike({ postId, userId: user.id }));
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+    }
+  };
+
+  const handleComments = (post: Post) => {
+    setSelectedPost(post);
     setIsCommentsVisible(true);
   };
 
-  const handleLocationPress = async (location: string) => {
+  const handleLocation = async (location: string) => {
     const coordinates = await getCoordinates(location);
     if (coordinates) {
       setSelectedLocation({
@@ -93,19 +97,13 @@ export default function ProfileScreen() {
             <View style={styles.profileContainer}>
               <View style={styles.avatarContainer}>
                 <Image
-                  source={require("@/assets/images/avatar.jpg")}
+                  source={
+                    user?.avatar
+                      ? { uri: user.avatar }
+                      : require("@/assets/images/avatar.jpg")
+                  }
                   style={styles.avatar}
                 />
-                <TouchableOpacity
-                  style={styles.avatarButton}
-                  onPress={() => console.log("Change avatar")}
-                >
-                  <Feather
-                    name="x-circle"
-                    size={25}
-                    color={COLORS.input.placeholderText}
-                  />
-                </TouchableOpacity>
               </View>
 
               <TouchableOpacity
@@ -115,42 +113,57 @@ export default function ProfileScreen() {
                 <Feather name="log-out" size={24} color={COLORS.grey} />
               </TouchableOpacity>
 
-              <Text style={styles.username}>Natali Romanova</Text>
+              <Text style={styles.username}>{user?.login || "User"}</Text>
 
               <View style={styles.postsContainer}>
-                {posts.map((post) => (
+                {userPosts.map((post) => (
                   <View key={post.id} style={styles.post}>
-                    <View style={styles.imageContainer}>
-                      <Image source={post.image} style={styles.postImage} />
-                    </View>
+                    <TouchableOpacity
+                      style={styles.imageContainer}
+                      onPress={() => handleComments(post)}
+                    >
+                      <Image
+                        source={{ uri: post.image }}
+                        style={styles.postImage}
+                      />
+                    </TouchableOpacity>
                     <Text style={styles.postTitle}>{post.title}</Text>
                     <View style={styles.postInfo}>
                       <View style={styles.postStats}>
                         <TouchableOpacity
                           style={styles.statsItem}
-                          onPress={() =>
-                            handleCommentsPress(post.id, post.image)
-                          }
+                          onPress={() => handleComments(post)}
                         >
                           <Feather
                             name="message-circle"
                             size={24}
                             color={COLORS.primary}
                           />
-                          <Text style={styles.statsText}>{post.comments}</Text>
+                          <Text style={styles.statsText}>
+                            {post.commentsCount || 0}
+                          </Text>
                         </TouchableOpacity>
-                        <View style={styles.statsItem}>
+                        <TouchableOpacity
+                          style={styles.statsItem}
+                          onPress={() => handleLike(post.id)}
+                        >
                           <Feather
                             name="thumbs-up"
                             size={24}
-                            color={COLORS.primary}
+                            color={
+                              post.likes?.[user?.id || ""]
+                                ? COLORS.primary
+                                : COLORS.grey
+                            }
                           />
-                          <Text style={styles.statsText}>{post.likes}</Text>
-                        </View>
+                          <Text style={styles.statsText}>
+                            {Object.keys(post.likes || {}).length}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
                       <TouchableOpacity
                         style={styles.locationContainer}
-                        onPress={() => handleLocationPress(post.location)}
+                        onPress={() => handleLocation(post.location)}
                       >
                         <Feather
                           name="map-pin"
@@ -171,26 +184,32 @@ export default function ProfileScreen() {
       {selectedPost && (
         <CommentsScreen
           isVisible={isCommentsVisible}
-          onClose={() => setIsCommentsVisible(false)}
+          onClose={() => {
+            setIsCommentsVisible(false);
+            setSelectedPost(null);
+          }}
           postId={selectedPost.id}
           postImage={selectedPost.image}
         />
       )}
 
-      <Modal
-        visible={isMapVisible}
-        animationType="slide"
-        transparent={true}
-        statusBarTranslucent={true}
-        onRequestClose={() => setIsMapVisible(false)}
-      >
-        {selectedLocation && (
+      {selectedLocation && (
+        <Modal
+          visible={isMapVisible}
+          animationType="slide"
+          transparent={true}
+          statusBarTranslucent={true}
+          onRequestClose={() => setIsMapVisible(false)}
+        >
           <MapScreen
             location={selectedLocation}
-            onClose={() => setIsMapVisible(false)}
+            onClose={() => {
+              setIsMapVisible(false);
+              setSelectedLocation(null);
+            }}
           />
-        )}
-      </Modal>
+        </Modal>
+      )}
     </View>
   );
 }

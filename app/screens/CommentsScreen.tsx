@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -13,61 +13,27 @@ import {
   Image,
   Modal,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 import { COLORS, FONTS } from "@/constants/theme";
-import { Comment, CommentsScreenProps } from "@/types/comments";
+import { RootState } from "@/redux/store";
+import { updatePostComments } from "@/redux/posts/postsSlice";
 import { Dimensions } from "react-native";
+import {
+  addComment as addCommentToDb,
+  getPostComments,
+  Comment as CommentType,
+} from "@/services/comments";
 
-const { width } = Dimensions.get("window");
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-const mockComments: Record<string, Comment[]> = {
-  "1": [
-    {
-      id: "1",
-      userId: "user1",
-      userAvatar: require("@/assets/images/man.jpg"),
-      postId: "1",
-      text: "Really love your most recent photo. I've been trying to capture the same thing for a few months and would love some tips!",
-      date: "09 червня, 2020 | 08:40",
-    },
-    {
-      id: "2",
-      userId: "currentUser",
-      userAvatar: require("@/assets/images/avatar.jpg"),
-      postId: "1",
-      text: "A fast 50mm like f1.8 would help with the bokeh. I've been using primes as they tend to get a bit sharper images.",
-      date: "09 червня, 2020 | 09:14",
-    },
-    {
-      id: "3",
-      userId: "user1",
-      userAvatar: require("@/assets/images/man.jpg"),
-      postId: "1",
-      text: "Thank you! That was very helpful!",
-      date: "09 червня, 2020 | 09:20",
-    },
-  ],
-  "2": [
-    {
-      id: "1",
-      userId: "user2",
-      userAvatar: require("@/assets/images/woman.jpg"),
-      postId: "2",
-      text: "Чудовий захід сонця! Де це знято?",
-      date: "10 червня, 2020 | 15:20",
-    },
-  ],
-  "3": [
-    {
-      id: "1",
-      userId: "user3",
-      userAvatar: require("@/assets/images/user1.jpg"),
-      postId: "3",
-      text: "Дуже атмосферне місце!",
-      date: "11 червня, 2020 | 12:35",
-    },
-  ],
-};
+interface CommentsScreenProps {
+  isVisible: boolean;
+  onClose: () => void;
+  postId: string;
+  postImage: string;
+}
 
 export default function CommentsScreen({
   isVisible,
@@ -75,33 +41,72 @@ export default function CommentsScreen({
   postId,
   postImage,
 }: CommentsScreenProps) {
+  const dispatch = useDispatch();
   const [comment, setComment] = useState("");
-  const currentUserId = "currentUser";
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const user = useSelector((state: RootState) => state.auth.user);
 
-  const handleSubmit = () => {
-    if (comment.trim()) {
-      const newComment: Comment = {
-        id: Date.now().toString(),
-        userId: currentUserId,
-        userAvatar: require("@/assets/images/avatar.jpg"),
-        postId,
-        text: comment,
-        date: new Date().toLocaleString("uk-UA", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-      console.log("New comment:", newComment);
-      setComment("");
-      Keyboard.dismiss();
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    if (isVisible) {
+      loadComments();
+    }
+  }, [isVisible]);
+
+  const loadComments = async () => {
+    try {
+      const postComments = await getPostComments(postId);
+      setComments(postComments);
+
+      dispatch(
+        updatePostComments({
+          postId,
+          commentsCount: postComments.length,
+        })
+      );
+    } catch (error) {
+      console.error("Error loading comments:", error);
     }
   };
 
-  const renderComment = ({ item }: { item: Comment }) => {
-    const isOwnComment = item.userId === currentUserId;
+  const handleSubmit = async () => {
+    if (!user || !comment.trim()) return;
+
+    try {
+      const newComment = await addCommentToDb(postId, {
+        userId: user.id,
+        userName: user.login,
+        userAvatar: user.avatar,
+        text: comment.trim(),
+      });
+
+      setComments((prev) => [...prev, newComment]);
+      dispatch(
+        updatePostComments({
+          postId,
+          commentsCount: comments.length + 1,
+        })
+      );
+
+      setComment("");
+      Keyboard.dismiss();
+
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 300);
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const renderComment = ({ item }: { item: CommentType }) => {
+    const isOwnComment = item.userId === user?.id;
 
     return (
       <View
@@ -111,7 +116,14 @@ export default function CommentsScreen({
         ]}
       >
         {!isOwnComment && (
-          <Image source={item.userAvatar} style={styles.avatar} />
+          <Image
+            source={
+              item.userAvatar
+                ? { uri: item.userAvatar }
+                : require("@/assets/images/avatar.jpg")
+            }
+            style={styles.avatar}
+          />
         )}
         <View style={styles.commentContent}>
           <View
@@ -120,13 +132,26 @@ export default function CommentsScreen({
               isOwnComment ? styles.ownBubble : styles.otherBubble,
             ]}
           >
+            <Text style={styles.userName}>{item.userName}</Text>
             <Text style={styles.commentText}>{item.text}</Text>
-            <Text style={styles.commentDate}>{item.date}</Text>
+            <Text style={styles.commentDate}>
+              {new Date(item.createdAt).toLocaleString("uk-UA", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
           </View>
         </View>
         {isOwnComment && (
           <Image
-            source={require("@/assets/images/avatar.jpg")}
+            source={
+              user.avatar
+                ? { uri: user.avatar }
+                : require("@/assets/images/avatar.jpg")
+            }
             style={styles.avatar}
           />
         )}
@@ -156,9 +181,12 @@ export default function CommentsScreen({
           </View>
 
           <View style={styles.content}>
-            <Image source={postImage} style={styles.postImage} />
+            <TouchableOpacity onPress={toggleFullScreen}>
+              <Image source={{ uri: postImage }} style={styles.postImage} />
+            </TouchableOpacity>
             <FlatList
-              data={mockComments[postId]}
+              ref={flatListRef}
+              data={comments}
               renderItem={renderComment}
               keyExtractor={(item) => item.id}
               contentContainerStyle={styles.commentsList}
@@ -201,6 +229,34 @@ export default function CommentsScreen({
           </KeyboardAvoidingView>
         </View>
       </TouchableWithoutFeedback>
+
+      <Modal
+        visible={isFullScreen}
+        transparent={true}
+        animationType="fade"
+        statusBarTranslucent={true}
+        onRequestClose={() => setIsFullScreen(false)}
+      >
+        <View style={styles.fullScreenContainer}>
+          <TouchableOpacity
+            style={styles.closeFullScreenButton}
+            onPress={() => setIsFullScreen(false)}
+          >
+            <Feather name="x" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.fullScreenImageContainer}
+            onPress={() => setIsFullScreen(false)}
+          >
+            <Image
+              source={{ uri: postImage }}
+              style={styles.fullScreenImage}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </Modal>
   );
 }
@@ -235,7 +291,7 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: "91.5%",
-    height: width * 0.64,
+    height: SCREEN_WIDTH * 0.64,
     marginHorizontal: "auto",
     marginVertical: 32,
     borderRadius: 8,
@@ -276,6 +332,12 @@ const styles = StyleSheet.create({
   otherBubble: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 6,
+  },
+  userName: {
+    fontSize: 13,
+    fontFamily: FONTS.medium,
+    color: COLORS.text.primary,
+    marginBottom: 4,
   },
   commentText: {
     color: COLORS.text.primary,
@@ -325,5 +387,33 @@ const styles = StyleSheet.create({
   },
   submitButtonDisabled: {
     backgroundColor: COLORS.input.background,
+  },
+  fullScreenContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fullScreenImageContainer: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fullScreenImage: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  },
+  closeFullScreenButton: {
+    position: "absolute",
+    top: 44,
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 2,
   },
 });

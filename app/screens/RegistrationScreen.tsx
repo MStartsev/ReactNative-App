@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
 import { AuthForm } from "@/components/auth/AuthForm";
 import type { RegistrationFormData, FormErrors } from "@/types/auth";
 import { getValidationError } from "@/utils/validation";
+import { registerUser } from "@/services/auth";
+import { setUser, setLoading, setError } from "@/redux/auth/authSlice";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "@/types/navigation";
 
@@ -14,14 +19,34 @@ interface RegistrationScreenProps {
 export default function RegistrationScreen({
   navigation,
 }: RegistrationScreenProps) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<RegistrationFormData>({
     login: "",
     email: "",
     password: "",
   });
+  const [avatar, setAvatar] = useState<string | undefined>();
   const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isFormTouched, setIsFormTouched] = useState<boolean>(false);
+
+  const handleAvatarPick = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: "images",
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets[0].uri) {
+        setAvatar(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log("Error picking avatar:", error);
+      Alert.alert("Помилка", "Не вдалося вибрати фото");
+    }
+  };
 
   const validateField = (field: keyof RegistrationFormData, value: string) => {
     const validationResult = getValidationError(field, value);
@@ -44,25 +69,36 @@ export default function RegistrationScreen({
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsFormTouched(true);
     const loginValid = validateField("login", formData.login);
     const emailValid = validateField("email", formData.email);
     const passwordValid = validateField("password", formData.password);
 
     if (loginValid && emailValid && passwordValid) {
-      console.log("Registration form submitted:", formData);
-      // Очищення форми
-      setFormData({
-        login: "",
-        email: "",
-        password: "",
-      });
-      setErrors({});
-      setIsFormTouched(false);
-      setShowPassword(false);
+      dispatch(setLoading(true));
+      try {
+        const userData = await registerUser(formData, avatar);
+        dispatch(setUser(userData));
 
-      navigation.navigate("Home", { screen: "Posts" });
+        // Очищення форми
+        setFormData({
+          login: "",
+          email: "",
+          password: "",
+        });
+        setAvatar(undefined);
+        setErrors({});
+        setIsFormTouched(false);
+        setShowPassword(false);
+
+        navigation.navigate("Home", { screen: "Posts" });
+      } catch (error: any) {
+        dispatch(setError(error.message));
+        Alert.alert("Помилка", error.message);
+      } finally {
+        dispatch(setLoading(false));
+      }
     }
   };
 
@@ -120,8 +156,9 @@ export default function RegistrationScreen({
       submitButtonTitle="Зареєструватися"
       bottomText="Вже є акаунт?"
       bottomLinkText="Увійти"
-      onBottomLinkPress={() => navigation.navigate("LoginScreen")} //"Navigate to Login"
-      onAvatarPress={() => console.log("Avatar upload pressed")}
+      onBottomLinkPress={() => navigation.navigate("LoginScreen")}
+      onAvatarPress={handleAvatarPick}
+      avatarUri={avatar}
       isValid={isFormValid()}
     />
   );
