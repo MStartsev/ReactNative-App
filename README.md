@@ -14,38 +14,38 @@
 10. Додати логіку додавання коментаря під постом, використовуючи Firebase та Redux.
 
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot.jpg" alt="Screenshot"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_2.jpg" alt="Screenshot2"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot.jpg" alt="Screenshot"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_2.jpg" alt="Screenshot2"/>
 
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_3.jpg" alt="Screenshot3"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_4.jpg" alt="Screenshot4"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_3.jpg" alt="Screenshot3"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_4.jpg" alt="Screenshot4"/>
  
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_5.jpg" alt="Screenshot5"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_6.jpg" alt="Screenshot6"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_5.jpg" alt="Screenshot5"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_6.jpg" alt="Screenshot6"/>
 </p>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_7.jpg" alt="Screenshot7"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_8.jpg" alt="Screenshot8"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_7.jpg" alt="Screenshot7"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_8.jpg" alt="Screenshot8"/>
 </p>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot_9.jpg" alt="Screenshot9"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__10.jpg" alt="Screenshot10"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot_9.jpg" alt="Screenshot9"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__10.jpg" alt="Screenshot10"/>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__11.jpg" alt="Screenshot11"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__12.jpg" alt="Screenshot12"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__11.jpg" alt="Screenshot11"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__12.jpg" alt="Screenshot12"/>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__13.jpg" alt="Screenshot13"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__14.jpg" alt="Screenshot14"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__13.jpg" alt="Screenshot13"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__14.jpg" alt="Screenshot14"/>
 </p>
 <p align="center">
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__15.jpg" alt="Screenshot15"/>
- <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-12/Screenshot__16.jpg" alt="Screenshot16"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__15.jpg" alt="Screenshot15"/>
+ <img width="300px" src="https://github.com/MStartsev/ReactNative-App/blob/hw-14/Screenshot__16.jpg" alt="Screenshot16"/>
 </p>
